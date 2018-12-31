@@ -24,15 +24,17 @@ def cut_word():
     output_file='output_data/135_分词后.txt'
     test_text=""
 
-    with open(input_file) as f:   #读文件，清除中文标点、格式符号
-        for line_num, line in enumerate(f):
+    with open(input_file) as in_f,open(output_file, mode='a',encoding='utf-8') as out_f:
+
+        for line_num, line in enumerate(in_f):  #读文件，清除中文标点、格式符号
             str=re.sub("[%s]+" %punctuation,"",line.strip())
             test_text=test_text+str
 
-    with open(output_file, mode='a',encoding='utf-8') as f:   #创建新文件，分词，并写入文件中
-        f.truncate()
-        seg_list = jieba.cut(test_text)
-        f.write("\n".join(seg_list))
+        seg_list = jieba.cut(test_text)     #分词
+
+        out_f.seek(0)       #清空原文件，将分词结果写入文件
+        out_f.truncate()
+        out_f.write("\n".join(seg_list))
 
 if __name__=='__main__':
     cut_word()
