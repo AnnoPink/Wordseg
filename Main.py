@@ -26,7 +26,7 @@ def cut_word():
 
     with open(input_file) as in_f,open(output_file, mode='a',encoding='utf-8') as out_f:
 
-        for line_num, line in enumerate(in_f):  #读文件，清除中文标点、格式符号
+        for line_num, line in enumerate(in_f):  #清除中文标点、格式符号
             str=re.sub("[%s]+" %punctuation,"",line.strip())
             test_text=test_text+str
 
