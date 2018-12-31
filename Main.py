@@ -4,23 +4,37 @@
 """
     docstring
     2018.12.29 Copy code from jieba
-                明天思考一下如何读取文档，并按照标点符号切割文本，生成test_sent，进行全篇分词
+        明天思考一下如何读取文档，并按照标点符号切割文本，生成test_sent，进行全篇分词
+    2018.12.31 Create 'cut_word()'
+        - 完成内容：（1）读文件'135.txt'，清洗数据
+                  （2）创建新文件'135_分词后.txt'，分词并写入
+        - 待完成项：（1）整理出适合教育政策的'userdict.text'
+                  （2）对新创建文件'135_分词后.txt'做词频统计，看统计结果
+                  （3）查一些词频可视化的代码或者软件
 """
+
+import re
 import jieba
+from zhon.hanzi import punctuation
 
-jieba.load_userdict("userdict.txt")
+def cut_word():
+    jieba.load_userdict("userdict.txt")
 
-test_sent="国家教育事业发展“十三五”规划，“十三五”时期是全面建成小康社会决胜阶段。为加快推进教育现代化，依据《中华人民共和国国民经济和社会发展第十三个五年规划纲要》和《国家中长期教育改革和发展规划纲要（2010—2020年）》（以下简称《教育规划纲要》），制定本规划。"
+    input_file='input_data/135.txt'
+    output_file='output_data/135_分词后.txt'
+    test_text=""
 
-seg_list=jieba.cut(test_sent,cut_all=True)
-print("Full Mode:"+"/".join(seg_list)) #全模式
+    with open(input_file) as f:   #读文件，清除中文标点、格式符号
+        for line_num, line in enumerate(f):
+            str=re.sub("[%s]+" %punctuation,"",line.strip())
+            test_text=test_text+str
 
-seg_list=jieba.cut(test_sent,cut_all=False)
-print("Default Mode:"+"/".join(seg_list)) #精确模式
+    with open(output_file, mode='a',encoding='utf-8') as f:   #创建新文件，分词，并写入文件中
+        f.truncate()
+        seg_list = jieba.cut(test_text)
+        f.write("\n".join(seg_list))
 
-seg_list=jieba.cut(test_sent) #默认是精确模式
-print(",".join(seg_list))
+if __name__=='__main__':
+    cut_word()
 
-seg_list=jieba.cut_for_search(test_sent) #搜索引擎模式
-print(",".join(seg_list))
 
