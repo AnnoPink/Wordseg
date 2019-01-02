@@ -13,9 +13,12 @@
                   （3）查一些词频可视化的代码或者软件
     2019.1.1  Create  'count_word()'
         - 完成内容：（1）对新创建文件'135_分词后.txt'做词频统计
-        - 待完成项：（1）修改'count_word()'中频数排序部分及写入代码（抄来的，太繁琐https://blog.csdn.net/u014070086/article/details/73201590）
+        - 待完成项：（1）修改'count_word()'中频数排序部分及写入代码（抄来的，太繁琐https://blog.csdn.net/u014070086/article/details/73201590） √2019.1.2
                   （2）看《十三五教育规划》，整理出一版'userdict.text'
                   （3）修改'cut_word()'\'count_word()'，想办法用string传递读写文件名
+    2019.1.2  Fix 'count_word()'
+        - 完成内容：（1）简化'count_word()'，3行替换7行，开心！
+                  （2）搞清楚"序列（列表，元组）和字典"的区别
 """
 
 import re
@@ -60,16 +63,9 @@ def count_word():
             else:
                 seg_dict[seg]+=1
 
-        order_dict=list(seg_dict.values())  #按频数从大到小排序，写入135_分词后_词频统计.txt中
-        order_dict.sort(reverse=True)
-
-        for i in range(len(order_dict)):
-            for keyseg in seg_dict:
-                if seg_dict[keyseg]==order_dict[i]:
-                    out_f.write(keyseg + '   ' + str(seg_dict[keyseg]) + '\n')
-                    seg_dict[keyseg]=0
-
-
+        order_dict=sorted(seg_dict.items(),key=lambda x:x[1],reverse=True)  #将字典转化为列表从大到小排序
+        for segtup in order_dict:  #在文件中循环输出列表中元组
+            out_f.write(segtup[0]+'   '+str(segtup[1])+'\n')
 
 if __name__=='__main__':
     cut_word()
