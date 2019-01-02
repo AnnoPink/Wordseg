@@ -29,11 +29,12 @@ def cut_word():
     jieba.load_userdict("userdict.txt")
 
     input_file='input_data/135.txt'
-    output_file='output_data/135_分词后.txt'
+    output_file1='output_data/135_分词.txt'
+    output_file2='output_data/135_分词后.txt'
     test_text=""
     words=[]
 
-    with open(input_file) as in_f,open(output_file, mode='a',encoding='utf-8') as out_f:
+    with open(input_file) as in_f,open(output_file1, mode='a',encoding='utf-8') as out_f1,open(output_file1, mode='a',encoding='utf-8') as out_f2:
 
         for line_num, line in enumerate(in_f):  #清除中文标点、格式符号
             str=re.sub("[%s]+" %punctuation,"",line.strip())
@@ -41,9 +42,13 @@ def cut_word():
 
         seg_list = jieba.cut(test_text)     #分词
 
-        out_f.seek(0)       #清空原文件，将分词结果写入文件
-        out_f.truncate()
-        out_f.write("\n".join(seg_list))
+        out_f1.seek(0)      #清空原文件，将分词文本结果写入文件
+        out_f1.truncate()
+        out_f1.write('/'.join(seg_list))
+
+        out_f2.seek(0)       #清空原文件，将分词结果写入文件
+        out_f2.truncate()
+        out_f2.write("\n".join(seg_list))
 
 
 def count_word():
@@ -65,7 +70,7 @@ def count_word():
 
         order_dict=sorted(seg_dict.items(),key=lambda x:x[1],reverse=True)  #将字典转化为列表从大到小排序
         for segtup in order_dict:  #在文件中循环输出列表中元组
-            out_f.write(segtup[0]+'   '+str(segtup[1])+'\n')
+            out_f.write(segtup[0]+'\t'+str(segtup[1])+'\n')
 
 if __name__=='__main__':
     cut_word()
