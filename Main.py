@@ -97,7 +97,7 @@ def cloud_word_test(filestr,inputfile):
 
 
 if __name__=='__main__':
-    textname='15'
+    textname='135'
     re_textname=textname+'_分词'
 
     seg_list=cut_word(textname)
