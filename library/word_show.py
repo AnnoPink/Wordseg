@@ -1,17 +1,21 @@
 from library import word_maker
+import xlwt
 import matplotlib.pyplot as plt
 from scipy.misc import imread
 from wordcloud import WordCloud,STOPWORDS
 
 def count_word(input_file):
-    output_file = input_file[:-4]+'_词频统计.txt'
+    output_file = input_file[:-4]+'_词频统计.xls'
     seg_dict={}
+    book = xlwt.Workbook(encoding='utf-8')  # 创建Workbook，相当于创建Excel
+    i = 0
 
-    with open(input_file) as in_f, open(output_file, mode='a', encoding='utf-8') as out_f:
-        out_f.seek(0)
-        out_f.truncate()
+    # 创建sheet，Sheet1为表的名字，cell_overwrite_ok为是否覆盖单元格
+    sheet1 = book.add_sheet(u'Sheet1', cell_overwrite_ok=True)
 
-        for line in in_f.readlines():  #读词seg，去除单个字，放入词典seg_dict中，统计词频
+    with open(input_file) as in_f:
+
+        for line in in_f.readlines():  # 读词seg，去除单个字，放入词典seg_dict中，统计词频
             seg=line.strip()
             if len(seg)<=1:
                 continue
@@ -20,9 +24,16 @@ def count_word(input_file):
             else:
                 seg_dict[seg]+=1
 
-        order_dict=sorted(seg_dict.items(),key=lambda x:x[1],reverse=True)  #将字典转化为列表从大到小排序
-        for segtup in order_dict:  #在文件中循环输出列表中元组
-            out_f.write(segtup[0]+'\t'+str(segtup[1])+'\n')
+    order_dict=sorted(seg_dict.items(),key=lambda x:x[1],reverse=True)  # 将字典转化为列表从大到小排序
+
+
+    for segtup in order_dict:  # 在文件中循环输出列表中元组
+        sheet1.write(i,0,segtup[0])
+        sheet1.write(i,1,str(segtup[1]))
+        i = i+1
+
+    # 保存为.xls文件
+    book.save(output_file)
 
     return output_file
 

@@ -12,7 +12,7 @@
 
     `store_word`()      用于存储分词结果，返回输出路径
 
-    `count_word()`      用于词频统计，返回输出路径
+    `count_word()`      用于词频统计，存储到excel表中，返回输出路径
 
     `cloud_word_test()` 用于画词云，返回输出路径
 """
@@ -32,4 +32,5 @@ if __name__=='__main__':
 
     word_show.count_word(seg_textpath)
     word_show.cloud_word_test(textname,seg_textpath)
+
 
